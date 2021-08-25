@@ -10,7 +10,7 @@ export default new Vuex.Store({
   state: {
     isLoggedIn: false,
     transactionData: [],
-    onHome: false,
+    editId: 0,
     userFullName: "",
     alertMessage: "",
     errorAlert: false,
@@ -22,11 +22,8 @@ export default new Vuex.Store({
     COMMIT_TRANSACTION(state, payload) {
       state.transactionData = payload;
     },
-    TOGGLE_MODAL_ADD(state) {
-      state.modalAdd = !state.modalAdd;
-    },
-    CHANGE_ON_HOME(state, payload) {
-      state.onHome = payload;
+    CHANGE_EDIT_ID(state, payload) {
+      state.editId = payload;
     },
     COMMIT_NAME(state, payload) {
       state.userFullName = payload;
@@ -58,6 +55,21 @@ export default new Vuex.Store({
         });
 
         context.commit("COMMIT_TRANSACTION", res.data);
+      } catch (err) {
+        console.log(err.response.data.message);
+      }
+    },
+
+    async editHandler(context, payload) {
+      try {
+        const { id, name, amount, currency, date, location } = payload;
+        await axios.put(
+          `${baseUrl}/transaction/${id}`,
+          { name, amount, currency, date, location },
+          {
+            headers: { access_token: localStorage.getItem("access_token") },
+          }
+        );
       } catch (err) {
         console.log(err.response.data.message);
       }

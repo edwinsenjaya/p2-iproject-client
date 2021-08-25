@@ -251,6 +251,7 @@
               <div class="mb-2">
                 <label class="col-form-label">Tag:</label>
                 <select class="form-select form-select-sm">
+                  <option selected disabled>select tag</option>
                   <option value="1">food</option>
                   <option value="2">transportation</option>
                   <option value="3">entertainment</option>
