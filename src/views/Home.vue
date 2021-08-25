@@ -23,34 +23,38 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <div class="row d-flex">
         <div class="col-10">
           <table
-            class="table table-bordered table-striped table-hover text-white"
+            class="
+              table table-bordered table-striped table-hover
+              text-white
+              table-sm
+            "
           >
-            <thead>
+            <thead class="text-center">
               <tr>
-                <th scope="col">No.</th>
-                <th scope="col" class="text-center">Name</th>
-                <th scope="col" class="text-center">Amount</th>
-                <th scope="col" class="text-center">Currency</th>
-                <th scope="col" class="text-center">Date</th>
-                <th scope="col" class="text-center">Category</th>
-                <th scope="col" class="text-center">Location</th>
+                <th scope="col">No</th>
+                <th scope="col">Name</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Date</th>
+                <th scope="col">Category</th>
+                <th scope="col">Location</th>
+                <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody id="transaction-table">
-              <!-- <transaction-table
-              v-for="(el, i) in transactionData"
-              :key="el.id"
-              :el="el"
-              :i="i"
-            ></transaction-table> -->
+              <transaction-table
+                v-for="(el, i) in transactionData"
+                :key="el.id"
+                :el="el"
+                :i="i"
+              ></transaction-table>
             </tbody>
           </table>
         </div>
-        <div class="col-2 d-flex flex-column">
-          <div class="row mb-5 flex-grow-1">
+        <div class="col-2 flex-grow-1">
+          <div class="row mb-5">
             <button
               @click="addTransactionBtn"
               id="add-transaction-btn"
@@ -72,8 +76,12 @@
             </form>
           </div>
           <div class="row mb-5">
+            <h4 class="text-center">Total Budget :</h4>
+            <h4 class="text-center">Rp 100.000.000</h4>
+          </div>
+          <div class="row mb-5">
             <h4 class="text-center">Saving Target :</h4>
-            <h4 class="text-center mb-3">Rp 10.000.000</h4>
+            <h4 class="text-center">Rp 10.000.000</h4>
             <button
               @click="savingBtn"
               id="saving-btn"
@@ -90,9 +98,27 @@
 </template>
 
 <script>
+import { mapActions, mapState } from "vuex";
+import TransactionTable from "../components/TransactionTable.vue";
+
 export default {
   name: "Home",
-  components: {},
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapState(["transactionData"]),
+  },
+  components: { TransactionTable },
+  methods: {
+    ...mapActions(["fetchTransaction"]),
+    addBudgetBtn() {},
+    addTransactionBtn() {},
+    savingBtn() {},
+  },
+  created() {
+    this.fetchTransaction();
+  },
 };
 </script>
 

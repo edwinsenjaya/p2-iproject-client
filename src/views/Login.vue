@@ -1,12 +1,12 @@
 <template>
   <section id="login" class="page">
-    <div class="container d-flex flex-column justify-content-center vw-100">
-      <div class="row">
-        <div class="col-4">
+    <div class="d-flex flex-column">
+      <div class="row p-0 m-0">
+        <div class="col-4 left">
           <div class="row mb-5">
             <h2 class="display-1 text-center">ExTrac</h2>
           </div>
-          <div class="row align-items-center mb-4">
+          <div class="row align-items-center mt-2 mb-4">
             <h4 class="display-6 text-center">Log In</h4>
           </div>
           <form id="login-form" class="text-dark" method="POST">
@@ -43,20 +43,14 @@
             <a @click.prevent="registerLink" href="">here</a>
           </h6>
         </div>
-        <div class="col-8">
-          <img
-            src="../assets/login-image.jpg"
-            class="img-fluid rounded"
-            alt="../assets/login-image.jpg"
-          />
-        </div>
+        <div class="col-8 image"></div>
       </div>
     </div>
   </section>
 </template>
 
 <script>
-// import { mapActions, mapState, mapMutations } from "vuex";
+import { mapActions, mapState, mapMutations } from "vuex";
 
 export default {
   name: "Login",
@@ -68,19 +62,19 @@ export default {
   },
   components: {},
   computed: {
-    // ...mapState(["isLoggedIn", "googleLoggedIn"]),
+    ...mapState(["isLoggedIn"]),
   },
   methods: {
-    // ...mapActions(["loginHandler", "onSignIn"]),
-    // ...mapMutations(["CHANGE_ON_HOME", "ERROR_ALERT"]),
-    // async loginBtn() {
-    //   const payload = {
-    //     email: this.loginEmail,
-    //     password: this.loginPassword,
-    //   };
-    //   await this.loginHandler(payload);
-    //   this.$router.push({ name: "TransportList" });
-    // },
+    ...mapActions(["loginHandler"]),
+    ...mapMutations(["CHANGE_ON_HOME", "ERROR_ALERT"]),
+    async loginBtn() {
+      const payload = {
+        email: this.loginEmail,
+        password: this.loginPassword,
+      };
+      await this.loginHandler(payload);
+      this.$router.push({ name: "Home" });
+    },
     // async googleSignIn() {
     //   const googleUser = await this.$gAuth.signIn();
     //   const idToken = googleUser.getAuthResponse().id_token;
@@ -99,8 +93,25 @@ export default {
 .page {
   min-height: 100vh;
 }
-/* img {
-  width: auto;
+
+#login-form {
+  width: 80%;
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  justify-content: center;
+}
+
+.image {
+  background: url(../assets/login-image.jpg);
+  background-size: cover;
   height: 100vh;
-} */
+  border-radius: 10px;
+  padding: 0 !important;
+  margin: 0 !important;
+}
 </style>
