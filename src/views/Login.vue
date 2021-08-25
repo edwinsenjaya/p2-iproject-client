@@ -66,7 +66,7 @@ export default {
   },
   methods: {
     ...mapActions(["loginHandler"]),
-    ...mapMutations(["CHANGE_ON_HOME", "ERROR_ALERT"]),
+    ...mapMutations([ "ERROR_ALERT"]),
     async loginBtn() {
       const payload = {
         email: this.loginEmail,
@@ -75,16 +75,9 @@ export default {
       await this.loginHandler(payload);
       this.$router.push({ name: "Home" });
     },
-    // async googleSignIn() {
-    //   const googleUser = await this.$gAuth.signIn();
-    //   const idToken = googleUser.getAuthResponse().id_token;
-    //   await this.onSignIn(idToken);
-    //   this.$router.push({ name: "TransportList" });
-    // },
-    // registerLink() {
-    //   this.$router.push({ name: "Register" });
-    //   this.CHANGE_ON_HOME(false);
-    // },
+    registerLink() {
+      this.$router.push({ name: "Register" });
+    },
   },
 };
 </script>

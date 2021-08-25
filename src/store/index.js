@@ -22,6 +22,9 @@ export default new Vuex.Store({
     COMMIT_TRANSACTION(state, payload) {
       state.transactionData = payload;
     },
+    TOGGLE_MODAL_ADD(state) {
+      state.modalAdd = !state.modalAdd;
+    },
     CHANGE_ON_HOME(state, payload) {
       state.onHome = payload;
     },

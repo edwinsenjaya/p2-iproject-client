@@ -1,109 +1,109 @@
 <template>
-  <section id="login" class="page">
-    <div class="container d-flex flex-column justify-content-center vw-100">
+  <section id="register" class="page">
+    <div class="container d-flex flex-column justify-content-center">
+      <div class="row mb-5">
+        <h1 class="display-1 text-center">ExTrac App</h1>
+      </div>
+      <div class="row align-items-center mb-3">
+        <h4 class="display-6 text-center">Register User</h4>
+      </div>
+      <div class="row align-items-center mb-3">
+        <h6 class="text-center">
+          Already have an account? Log in <a href="">here</a>
+        </h6>
+      </div>
+
       <div class="row">
+        <div class="col-4"></div>
         <div class="col-4">
-          <div class="row mb-5">
-            <h2 class="display-1 text-center">ExTrac</h2>
-          </div>
-          <div class="row align-items-center mb-4">
-            <h4 class="display-6 text-center">Register</h4>
-          </div>
-          <form
-            id="register-form"
-            method="POST"
-            @submit.prevent="submitRegister"
-          >
+          <form class="mb-3">
             <div class="mb-3">
-              <label class="form-label">Email address</label>
+              <label for="exampleInputEmail1" class="form-label"
+                >Email address</label
+              >
               <input
-                type="text"
-                id="register-email"
+                type="email"
                 class="form-control"
                 v-model="registerEmail"
               />
             </div>
-            <div class="mb-4">
-              <label class="form-label">Password</label>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label"
+                >Password</label
+              >
               <input
                 type="password"
-                id="register-password"
                 class="form-control"
+                aria-describedby="passwordHelp"
                 v-model="registerPassword"
               />
+              <div id="passwordHelp" class="form-text">
+                Your password must be at least 5 characters
+              </div>
             </div>
             <div class="mb-3">
               <label class="form-label">Full Name</label>
-              <input
-                type="text"
-                id="register-name"
-                class="form-control"
-                v-model="registerName"
-              />
+              <input v-model="registerName" type="text" class="form-control" />
             </div>
             <div class="mb-3">
               <label class="form-label">Phone Number</label>
               <input
+                v-model="registerPhone"
                 type="text"
-                id="register-phone"
                 class="form-control"
                 placeholder="optional"
-                v-model="registerPhone"
               />
             </div>
             <div class="mb-4">
               <label class="form-label">Address</label>
               <input
+                v-model="registerAddress"
                 type="text"
-                id="register-address"
                 class="form-control"
                 placeholder="optional"
-                v-model="registerAddress"
               />
             </div>
             <div class="mb-3">
-              <label class="form-label">Starting Budget</label>
+              <label for="exampleInputEmail1" class="form-label"
+                >Starting Budget</label
+              >
               <input
                 type="number"
-                id="register-budget"
                 class="form-control"
-                placeholder="Please input your starting budget"
+                aria-describedby="budgetHelp"
                 v-model="registerBudget"
               />
+              <div id="budgetHelp" class="form-text">
+                Input your starting budget
+              </div>
             </div>
             <div class="mb-3">
-              <label class="form-label">Saving Target</label>
+              <label for="exampleInputEmail1" class="form-label"
+                >Starting Budget</label
+              >
               <input
                 type="number"
-                id="register-saving"
                 class="form-control"
-                placeholder="Please input your saving target"
+                aria-describedby="savingHelp"
                 v-model="registerSaving"
               />
+              <div id="savingHelp" class="form-text">Set a saving target</div>
             </div>
-            <button type="submit" class="btn btn-primary mb-5">Register</button>
+            <button type="submit" class="btn btn-primary">Register</button>
           </form>
-          <h6 class="mb-5">
-            <a href="" @click.prevent="loginPageLink">Back to login page</a>
-          </h6>
         </div>
-        <div class="col-8">
-          <img
-            src="../assets/login-image.jpg"
-            class="img-fluid rounded"
-            alt="../assets/login-image.jpg"
-          />
-        </div>
+        <div class="col-4"></div>
       </div>
     </div>
   </section>
 </template>
 
 <script>
-// import { mapActions, mapState, mapMutations } from "vuex";
+// import { mapActions } from "vuex";
+// import { mapMutations } from "vuex";
 
 export default {
-  name: "Login",
+  name: "Register",
   data() {
     return {
       registerEmail: "",
@@ -115,8 +115,6 @@ export default {
       registerSaving: 0,
     };
   },
-  components: {},
-  computed: {},
   methods: {
     // ...mapActions(["registerHandler"]),
     // ...mapMutations(["CHANGE_ON_HOME"]),
@@ -148,12 +146,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.page {
-  min-height: 100vh;
-}
-/* img {
-  width: auto;
-  height: 100vh;
-} */
-</style>
+<style></style>

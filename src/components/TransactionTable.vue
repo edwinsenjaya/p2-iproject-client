@@ -3,23 +3,23 @@
     <th>{{ i + 1 }}</th>
     <td>{{ el.name }}</td>
     <td class="d-flex justify-content-between">
-      <div class="me-2">{{ el.amount }}</div>
+      <div class="ms-1 me-2">{{ formattedCurrency }}</div>
       <select
         class="form-select form-select-sm"
         aria-label="Default select example"
       >
-        <option value="IDR">IDR</option>
-        <option value="USD">USD</option>
-        <option value="EUR">EUR</option>
-        <option value="AUD">AUD</option>
-        <option value="SGD">SGD</option>
-        <option value="JPY">JPY</option>
-        <option value="ETH">ETH</option>
+        <option :selected="el.currency === 'IDR'" value="IDR">IDR</option>
+        <option :selected="el.currency === 'USD'" value="USD">USD</option>
+        <option :selected="el.currency === 'EUR'" value="EUR">EUR</option>
+        <option :selected="el.currency === 'AUD'" value="AUD">AUD</option>
+        <option :selected="el.currency === 'SGD'" value="SGD">SGD</option>
+        <option :selected="el.currency === 'JPY'" value="JPY">JPY</option>
+        <option :selected="el.currency === 'ETH'" value="ETH">ETH</option>
       </select>
     </td>
-    <td>{{ formatedDate }}</td>
-    <td>Food</td>
-    <td>{{ el.Location }}</td>
+    <td>{{ formattedDate }}</td>
+    <td>{{ el.Tags.map((el) => el.name).join(", ") }}</td>
+    <td>{{ el.location }}</td>
     <td>
       <div class="btn-group" role="group" aria-label="Basic example">
         <button type="button" class="btn btn-warning">Edit</button>
@@ -36,8 +36,19 @@ export default {
   name: "TransactionTable",
   props: ["el", "i"],
   computed: {
-    formatedDate() {
+    formattedDate() {
       return format(new Date(this.el.date), "EE, dd LLL yyyy");
+    },
+    formattedCurrency() {
+      const currency = ["USD", "IDR", "AUD", "EUR", "JPY", "SGD"];
+      if (currency.includes(this.el.currency)) {
+        const formatter = new Intl.NumberFormat("en-ID", {
+          style: "currency",
+          currency: this.el.currency,
+        });
+
+        return formatter.format(this.el.amount);
+      } else return this.el.amount;
     },
   },
 };
