@@ -3,8 +3,11 @@
     <div class="d-flex flex-column">
       <div class="row p-0 m-0">
         <div class="col-4 left">
-          <div class="row mb-5">
+          <div class="row mb-2">
             <h2 class="display-1 text-center">ExTrac</h2>
+          </div>
+          <div class="row mb-5">
+            <h5 class="text-center">A simple expense tracker application</h5>
           </div>
           <div class="row align-items-center mt-2 mb-4">
             <h4 class="display-6 text-center">Log In</h4>
@@ -66,7 +69,7 @@ export default {
   },
   methods: {
     ...mapActions(["loginHandler"]),
-    ...mapMutations([ "ERROR_ALERT"]),
+    ...mapMutations(["ERROR_ALERT"]),
     async loginBtn() {
       const payload = {
         email: this.loginEmail,

@@ -7,7 +7,7 @@
       </div>
       <div class="row mb-5">
         <div class="col-10">
-          <h5 class="display-4 text-center">
+          <h5 v-if="transactionData[0]" class="display-4 text-center">
             Your current balance:
             {{ formattedCurrency(transactionData[0].User.balance) }}
           </h5>
@@ -41,6 +41,7 @@
                 <th scope="col">No</th>
                 <th scope="col">Name</th>
                 <th scope="col">Amount</th>
+                <th scope="col">Convert</th>
                 <th scope="col">Date</th>
                 <th scope="col">Category</th>
                 <th scope="col">Location</th>
@@ -69,7 +70,7 @@
               Add new transaction
             </button>
           </div>
-          <div class="row mb-5">
+          <!-- <div class="row mb-5">
             <form class="d-flex flex-column">
               <input
                 class="form-control mb-2"
@@ -79,16 +80,16 @@
               />
               <button class="btn btn-success" type="submit">Search</button>
             </form>
-          </div>
+          </div> -->
           <div class="row mb-5">
             <h4 class="text-center">Total Budget :</h4>
-            <h4 class="text-center">
+            <h4 v-if="transactionData[0]" class="text-center">
               {{ formattedCurrency(transactionData[0].User.budget) }}
             </h4>
           </div>
           <div class="row mb-5">
             <h4 class="text-center">Saving Target :</h4>
-            <h4 class="text-center">
+            <h4 v-if="transactionData[0]" class="text-center">
               {{ formattedCurrency(transactionData[0].User.saving) }}
             </h4>
             <button
@@ -132,6 +133,7 @@
                   class="form-control"
                   id="floatingSaving"
                   placeholder="IDR"
+                  v-model="changedSaving"
                 />
                 <label for="floatingSaving">IDR</label>
               </div>
@@ -145,7 +147,14 @@
             >
               Close
             </button>
-            <button type="button" class="btn btn-primary">Save</button>
+            <button
+              @click="changeSaving"
+              data-bs-dismiss="modal"
+              type="button"
+              class="btn btn-primary"
+            >
+              Save
+            </button>
           </div>
         </div>
       </div>
@@ -177,6 +186,7 @@
                   class="form-control"
                   id="floatingBudget"
                   placeholder="IDR"
+                  v-model="addedBudget"
                 />
                 <label for="floatingBudget">IDR</label>
               </div>
@@ -190,13 +200,20 @@
             >
               Close
             </button>
-            <button type="button" class="btn btn-primary">Add</button>
+            <button
+              data-bs-dismiss="modal"
+              @click="addBudget"
+              type="button"
+              class="btn btn-primary"
+            >
+              Add
+            </button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ADD NEW -->
+    <!-- ADD NEW TRANSACTION -->
     <div
       class="modal fade text-black"
       id="addModal"
@@ -218,15 +235,18 @@
             <form>
               <div class="mb-2">
                 <label class="col-form-label">Name:</label>
-                <input type="text" class="form-control" />
+                <input type="text" class="form-control" v-model="addName" />
               </div>
               <div class="mb-2">
                 <label class="col-form-label">Amount:</label>
-                <input type="number" class="form-control" />
+                <input v-model="addAmount" type="number" class="form-control" />
               </div>
               <div class="mb-2">
                 <label class="col-form-label">Currency:</label>
-                <select class="form-select form-select-sm">
+                <select
+                  v-model="addCurrency"
+                  class="form-select form-select-sm"
+                >
                   <option value="IDR">IDR</option>
                   <option value="USD">USD</option>
                   <option value="EUR">EUR</option>
@@ -238,11 +258,12 @@
               </div>
               <div class="mb-2">
                 <label class="col-form-label">Date:</label>
-                <input type="date" class="form-control" />
+                <input v-model="addDate" type="date" class="form-control" />
               </div>
               <div class="mb-2">
                 <label class="col-form-label">Location:</label>
                 <input
+                  v-model="addLocation"
                   type="text"
                   placeholder="optional"
                   class="form-control"
@@ -250,7 +271,7 @@
               </div>
               <div class="mb-2">
                 <label class="col-form-label">Tag:</label>
-                <select class="form-select form-select-sm">
+                <select v-model="addTag" class="form-select form-select-sm">
                   <option selected disabled>select tag</option>
                   <option value="1">food</option>
                   <option value="2">transportation</option>
@@ -279,7 +300,13 @@
             >
               Close
             </button>
-            <button type="button" class="btn btn-primary">Add</button>
+            <button
+              @click="addTransaction"
+              type="button"
+              class="btn btn-primary"
+            >
+              Add
+            </button>
           </div>
         </div>
       </div>
@@ -295,14 +322,28 @@ import Navbar from "../components/Navbar.vue";
 export default {
   name: "Home",
   data() {
-    return {};
+    return {
+      addedBudget: 0,
+      changedSaving: 0,
+      addName: "",
+      addAmount: 0,
+      addCurrency: "",
+      addDate: null,
+      addLocation: "",
+      addTag: 0,
+    };
   },
   computed: {
     ...mapState(["transactionData"]),
   },
   components: { TransactionTable, Navbar },
   methods: {
-    ...mapActions(["fetchTransaction"]),
+    ...mapActions([
+      "fetchTransaction",
+      "addBudgetHandler",
+      "changeSavingHandler",
+      "addTransHandler",
+    ]),
     ...mapMutations(["TOGGLE_MODAL_ADD"]),
     formattedCurrency(n) {
       const formatter = new Intl.NumberFormat("en-ID", {
@@ -312,11 +353,31 @@ export default {
 
       return formatter.format(n);
     },
-    addBudgetBtn() {},
-    addTransactionBtn() {
-      this.TOGGLE_MODAL_ADD();
+    async addTransaction() {
+      const payload = {
+        name: this.addName,
+        amount: this.addAmount,
+        currency: this.addCurrency,
+        date: this.addDate,
+        location: this.addLocation,
+        TagId: this.addTag,
+      };
+      await this.addTransHandler(payload);
+      this.fetchTransaction();
     },
-    savingBtn() {},
+    addBudget() {
+      const payload = { addBudget: this.addedBudget };
+      this.addBudgetHandler(payload);
+      this.addedBudget = 0;
+      this.fetchTransaction();
+    },
+
+    changeSaving() {
+      const payload = { saving: this.changedSaving };
+      this.changeSavingHandler(payload);
+      this.changedSaving = 0;
+      this.fetchTransaction();
+    },
   },
   created() {
     this.fetchTransaction();

@@ -9,14 +9,15 @@
       </div>
       <div class="row align-items-center mb-3">
         <h6 class="text-center">
-          Already have an account? Log in <a href="">here</a>
+          Already have an account? Log in
+          <a @click.prevent="backToLogin" href="">here</a>
         </h6>
       </div>
 
       <div class="row">
         <div class="col-4"></div>
         <div class="col-4">
-          <form class="mb-3">
+          <form class="mb-3" @submit.prevent="submitRegister">
             <div class="mb-3">
               <label for="exampleInputEmail1" class="form-label"
                 >Email address</label
@@ -99,8 +100,7 @@
 </template>
 
 <script>
-// import { mapActions } from "vuex";
-// import { mapMutations } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   name: "Register",
@@ -116,32 +116,32 @@ export default {
     };
   },
   methods: {
-    // ...mapActions(["registerHandler"]),
-    // ...mapMutations(["CHANGE_ON_HOME"]),
-    // loginPageLink() {
-    //   this.$router.push({ name: "Login" });
-    // },
-    // async submitRegister() {
-    //   const payload = {
-    //     email: this.registerEmail,
-    //     password: this.registerPassword,
-    //     username: this.registerUsername,
-    //     phoneNumber: this.registerPhone,
-    //     address: this.registerAddress,
-    //   };
-    //   try {
-    //     await this.registerHandler(payload);
-    //     this.$router.push({ name: "Login" });
-    //     this.CHANGE_ON_HOME(false);
-    //     this.registerEmail = "";
-    //     this.registerPassword = "";
-    //     this.registerUsername = "";
-    //     this.registerPhone = "";
-    //     this.registerAddress = "";
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // },
+    backToLogin() {
+      this.$router.push({ name: "Login" });
+    },
+    ...mapActions(["registerHandler"]),
+
+    async submitRegister() {
+      const payload = {
+        email: this.registerEmail,
+        password: this.registerPassword,
+        fullName: this.registerName,
+        phoneNumber: this.registerPhone,
+        address: this.registerAddress,
+        budget: this.registerBudget,
+        saving: this.registerSaving,
+      };
+
+      await this.registerHandler(payload);
+      this.$router.push({ name: "Login" });
+      this.registerEmail = "";
+      this.registerPassword = "";
+      this.registerName = "";
+      this.registerPhone = "";
+      this.registerAddress = "";
+      this.registerBudget = 0;
+      this.registerSaving = 0;
+    },
   },
 };
 </script>

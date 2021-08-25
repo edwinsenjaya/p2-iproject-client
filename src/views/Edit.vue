@@ -18,11 +18,21 @@
           <form class="mb-3" @submit="editSubmit">
             <div class="mb-3">
               <label class="form-label">Name</label>
-              <input v-model="editName" type="text" class="form-control" />
+              <input
+                v-model="editName"
+                type="text"
+                class="form-control"
+                :placeholder="editData.name"
+              />
             </div>
             <div class="mb-3">
               <label class="form-label">Amount</label>
-              <input v-model="editAmount" type="number" class="form-control" />
+              <input
+                :placeholder="editData.amount"
+                v-model="editAmount"
+                type="number"
+                class="form-control"
+              />
             </div>
             <div class="mb-3">
               <label class="col-form-label">Currency:</label>
@@ -46,7 +56,7 @@
                 v-model="editLocation"
                 type="text"
                 class="form-control"
-                placeholder="optional"
+                :placeholder="editData.location"
               />
             </div>
 
@@ -74,16 +84,16 @@ export default {
     };
   },
   computed: {
-    ...mapState(["editId"]),
+    ...mapState(["editData"]),
   },
   methods: {
-    ...mapActions(["editHandler"]),
+    ...mapActions(["editHandler", "fetchTransaction"]),
     homeBtn() {
       this.$router.push({ name: "Home" });
     },
     async editSubmit() {
       const payload = {
-        id: this.editId,
+        id: this.editData.id,
         name: this.editName,
         amount: this.editAmount,
         currency: this.editCurrency,
@@ -91,6 +101,7 @@ export default {
         location: this.editLocation || "No location specified",
       };
       this.editHandler(payload);
+      this.fetchTransaction();
       this.$router.push({ name: "Home" });
       this.editName = "";
       this.editAmount = 0;
