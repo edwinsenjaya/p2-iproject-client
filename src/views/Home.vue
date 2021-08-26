@@ -7,6 +7,9 @@
       </div>
       <div class="row mb-5">
         <div class="col-10">
+          <h5 v-if="transactionData.length === 0" class="display-4 text-center">
+            Please add a transaction to see your data!
+          </h5>
           <h5 v-if="transactionData[0]" class="display-4 text-center">
             Your current balance:
             {{ formattedCurrency(transactionData[0].User.balance) }}
@@ -70,25 +73,42 @@
               Add new transaction
             </button>
           </div>
-          <!-- <div class="row mb-5">
+          <div class="row mb-5">
             <form class="d-flex flex-column">
               <input
                 class="form-control mb-2"
                 type="search"
                 placeholder="Filter by name"
-                aria-label="Search"
+                v-model="filterName"
               />
-              <button class="btn btn-success" type="submit">Search</button>
+              <button
+                @click.prevent="filterBtn"
+                class="btn btn-success mb-2"
+                type="submit"
+              >
+                Filter
+              </button>
+              <button
+                @click.prevent="resetFilter"
+                class="btn btn-secondary"
+                type="submit"
+              >
+                Reset
+              </button>
             </form>
-          </div> -->
+          </div>
           <div class="row mb-5">
-            <h4 class="text-center">Total Budget :</h4>
+            <h4 v-if="transactionData.length !== 0" class="text-center">
+              Total Budget :
+            </h4>
             <h4 v-if="transactionData[0]" class="text-center">
               {{ formattedCurrency(transactionData[0].User.budget) }}
             </h4>
           </div>
           <div class="row mb-5">
-            <h4 class="text-center">Saving Target :</h4>
+            <h4 v-if="transactionData.length !== 0" class="text-center">
+              Saving Target :
+            </h4>
             <h4 v-if="transactionData[0]" class="text-center">
               {{ formattedCurrency(transactionData[0].User.saving) }}
             </h4>
@@ -304,6 +324,7 @@
               @click="addTransaction"
               type="button"
               class="btn btn-primary"
+              data-bs-dismiss="modal"
             >
               Add
             </button>
@@ -331,6 +352,7 @@ export default {
       addDate: null,
       addLocation: "",
       addTag: 0,
+      filterName: "",
     };
   },
   computed: {
@@ -377,6 +399,21 @@ export default {
       this.changeSavingHandler(payload);
       this.changedSaving = 0;
       this.fetchTransaction();
+    },
+    async filterBtn() {
+      const payload = {
+        name: this.filterName,
+      };
+
+      await this.fetchTransaction(payload);
+    },
+    async resetFilter() {
+      this.filterName = "";
+
+      const payload = {
+        name: null,
+      };
+      await this.fetchTransaction(payload);
     },
   },
   created() {

@@ -1,17 +1,12 @@
 <template>
-  <section id="register" class="page">
-    <div class="container d-flex flex-column justify-content-center">
+  <section id="addTag" class="page">
+    <navbar></navbar>
+    <div class="container d-flex flex-column justify-content-center mt-4">
       <div class="row mb-5">
         <h1 class="display-1 text-center">ExTrac App</h1>
       </div>
       <div class="row align-items-center mb-3">
         <h4 class="display-6 text-center">Add more tag</h4>
-      </div>
-      <div class="row align-items-center mb-5">
-        <h6 class="text-center">
-          Back to
-          <a @click.prevent="backToHome" href="">home</a>
-        </h6>
       </div>
       <div class="row">
         <div class="col-4"></div>
@@ -51,6 +46,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import Navbar from "../components/Navbar.vue";
 
 export default {
   name: "AddTag",
@@ -59,6 +55,7 @@ export default {
       addedTag: 0,
     };
   },
+  components: { Navbar },
   computed: {
     ...mapState(["addTagData"]),
   },
@@ -73,7 +70,8 @@ export default {
     },
     async submitTag() {
       const payload = { id: this.addTagData.id, addedTag: this.addedTag };
-      this.addTag(payload);
+      await this.addTag(payload);
+      this.$router.push({ name: "Home" });
     },
   },
 };

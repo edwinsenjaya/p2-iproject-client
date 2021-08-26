@@ -88,7 +88,7 @@ export default {
     },
     addMoreTag() {
       this.CHANGE_TAG_DATA(this.el);
-      this.$router.push({ name: "AddTag" });
+      this.$router.push({ path: `/tag/${this.el.id}` });
     },
   },
 };

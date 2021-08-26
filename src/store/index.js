@@ -17,6 +17,10 @@ export default new Vuex.Store({
     userFullName: "",
     alertMessage: "",
     errorAlert: false,
+    successAlert: false,
+    filterQuery: {
+      name: null,
+    },
   },
   mutations: {
     CHANGE_STATE_LOGIN(state, payload) {
@@ -43,6 +47,10 @@ export default new Vuex.Store({
     ERROR_ALERT(state, payload = "") {
       state.alertMessage = payload;
       state.errorAlert = !state.errorAlert;
+    },
+    SUCCESS_ALERT(state, payload = "") {
+      state.alertMessage = payload;
+      state.successAlert = !state.successAlert;
     },
   },
   actions: {
@@ -71,16 +79,28 @@ export default new Vuex.Store({
       }
     },
 
-    async fetchTransaction(context) {
+    async fetchTransaction(context, payload) {
       try {
-        const res = await axios.get(`${baseUrl}/transaction`, {
+        //
+        let filterString = "";
+        const filter = {
+          ...this.state.filterQuery,
+          ...payload,
+        };
+
+        if (filter.name) {
+          filterString += `filter[name]=${filter.name}`;
+        }
+
+        const res = await axios.get(`${baseUrl}/transaction?${filterString}`, {
           headers: { access_token: localStorage.getItem("access_token") },
         });
+        //
 
         context.commit("COMMIT_TRANSACTION", res.data);
         context.commit("COMMIT_NAME", localStorage.getItem("name"));
       } catch (err) {
-        console.log(err.response.data.message);
+        context.commit("ERROR_ALERT", err.response.data.message);
       }
     },
 
@@ -106,7 +126,7 @@ export default new Vuex.Store({
           saving,
         });
       } catch (err) {
-        console.log(err.response.data.message);
+        context.commit("ERROR_ALERT", err.response.data.message);
       }
     },
 
@@ -115,8 +135,9 @@ export default new Vuex.Store({
         await axios.post(`${baseUrl}/transaction`, payload, {
           headers: { access_token: localStorage.getItem("access_token") },
         });
+        context.commit("SUCCESS_ALERT", "New transaction added!");
       } catch (err) {
-        console.log(err.response.data.message);
+        context.commit("ERROR_ALERT", err.response.data.message);
       }
     },
 
@@ -125,8 +146,9 @@ export default new Vuex.Store({
         await axios.patch(`${baseUrl}/budget`, payload, {
           headers: { access_token: localStorage.getItem("access_token") },
         });
+        context.commit("SUCCESS_ALERT", "Successfully add budget!");
       } catch (err) {
-        console.log(err.response.data.message);
+        context.commit("ERROR_ALERT", err.response.data.message);
       }
     },
 
@@ -135,8 +157,9 @@ export default new Vuex.Store({
         await axios.patch(`${baseUrl}/saving`, payload, {
           headers: { access_token: localStorage.getItem("access_token") },
         });
+        context.commit("SUCCESS_ALERT", "Successfully change saving target!");
       } catch (err) {
-        console.log(err.response.data.message);
+        context.commit("ERROR_ALERT", err.response.data.message);
       }
     },
 
@@ -152,7 +175,7 @@ export default new Vuex.Store({
         );
         context.commit("CHANGE_EDIT_DATA", {});
       } catch (err) {
-        console.log(err.response.data.message);
+        context.commit("ERROR_ALERT", err.response.data.message);
       }
     },
 
@@ -164,13 +187,13 @@ export default new Vuex.Store({
 
         context.commit("COMMIT_TAGS", res.data);
       } catch (err) {
-        console.log(err.response.data.message);
+        context.commit("ERROR_ALERT", err.response.data.message);
       }
     },
 
     async addTag(context, payload) {
       try {
-        await axios.put(
+        await axios.post(
           `${baseUrl}/tag/${payload.id}`,
           { addedTag: payload.addedTag },
           {
@@ -178,22 +201,24 @@ export default new Vuex.Store({
           }
         );
         context.commit("CHANGE_TAG_DATA", {});
+        context.commit("SUCCESS_ALERT", "Successfully add category!");
       } catch (err) {
-        console.log(err.response.data.message);
+        context.commit("ERROR_ALERT", err.response.data.message);
       }
     },
 
     async convertCurrency(context, payload) {
       try {
-        await axios.patch(
+        const res = await axios.patch(
           `${baseUrl}/transaction/currency/${payload.id}`,
           { convertTo: payload.convertTo },
           {
             headers: { access_token: localStorage.getItem("access_token") },
           }
         );
+        context.commit("SUCCESS_ALERT", res.data.message);
       } catch (err) {
-        console.log(err.response.data.message);
+        context.commit("ERROR_ALERT", err.response.data.message);
       }
     },
 
@@ -206,8 +231,9 @@ export default new Vuex.Store({
           }
         );
         context.commit("CHANGE_DELETE_DATA", {});
+        context.commit("SUCCESS_ALERT", "Transaction successfully deleted!");
       } catch (err) {
-        console.log(err.response.data.message);
+        context.commit("ERROR_ALERT", err.response.data.message);
       }
     },
   },

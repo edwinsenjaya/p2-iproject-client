@@ -1,15 +1,9 @@
 <template>
-  <section id="transaction-list" class="page">
+  <section id="tag-list" class="page">
     <navbar></navbar>
-    <div class="container d-flex flex-column vw-100">
+    <div class="container d-flex flex-column vw-100 mt-4">
       <div class="row mb-3">
         <h1 class="display-1 text-center">Category List</h1>
-      </div>
-      <div class="row align-items-center mb-3">
-        <h6 class="text-center">
-          Back to
-          <a @click.prevent="backToHome" href="">home</a>
-        </h6>
       </div>
       <div class="row d-flex">
         <div class="col-3"></div>

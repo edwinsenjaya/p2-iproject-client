@@ -1,16 +1,12 @@
 <template>
   <section id="edit" class="page">
-    <div class="container d-flex flex-column justify-content-center">
+    <navbar></navbar>
+    <div class="container d-flex flex-column justify-content-center mt-4">
       <div class="row mb-5">
         <h1 class="display-1 text-center">ExTrac App</h1>
       </div>
       <div class="row align-items-center mb-3">
         <h4 class="display-6 text-center">Edit Transaction</h4>
-      </div>
-      <div class="row align-items-center mb-3">
-        <h6 class="text-center">
-          Back to <a href="" @click.prevent="homeBtn">home</a>
-        </h6>
       </div>
       <div class="row">
         <div class="col-4"></div>
@@ -71,6 +67,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import Navbar from "../components/Navbar.vue";
 
 export default {
   name: "Register",
@@ -83,6 +80,7 @@ export default {
       editLocation: "",
     };
   },
+  components: { Navbar },
   computed: {
     ...mapState(["editData"]),
   },
