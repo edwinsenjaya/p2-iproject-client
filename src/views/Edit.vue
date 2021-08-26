@@ -68,7 +68,6 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import Navbar from "../components/Navbar.vue";
-
 export default {
   name: "Register",
   data() {

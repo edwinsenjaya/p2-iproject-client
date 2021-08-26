@@ -386,6 +386,12 @@ export default {
       };
       await this.addTransHandler(payload);
       this.fetchTransaction();
+      this.addName = "";
+      this.addAmount = 0;
+      this.addCurrency = "";
+      this.addDate = null;
+      this.addLocation = "";
+      this.addTag = 0;
     },
     addBudget() {
       const payload = { addBudget: this.addedBudget };

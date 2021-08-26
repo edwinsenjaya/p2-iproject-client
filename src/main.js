@@ -13,3 +13,5 @@ new Vue({
   store,
   render: (h) => h(App),
 }).$mount("#app");
+
+// https://extrac-app-dd540.web.app

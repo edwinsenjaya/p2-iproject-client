@@ -4,7 +4,8 @@ import axios from "axios";
 
 Vue.use(Vuex);
 
-const baseUrl = "http://localhost:3000";
+// const baseUrl = "http://localhost:3000";
+const baseUrl = "https://extrac-app.herokuapp.com";
 
 export default new Vuex.Store({
   state: {
